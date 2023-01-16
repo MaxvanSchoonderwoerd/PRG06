@@ -137,7 +137,7 @@ router
   .options((req, res) => {
     res.header("Access-Control-Allow-Methods", "HEAD, GET, POST, OPTIONS");
     res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Content-Type, Accept");
+    res.header("Access-Control-Allow-Headers", "Content-Type, Accept, Access-Control-Allow-Origin");
     res.header("Allow", "HEAD, GET, POST, OPTIONS");
     res.status(200).send();
   })
@@ -187,7 +187,7 @@ router
         };
         res.header("Access-Control-Allow-Methods", "HEAD, GET, POST, OPTIONS");
         res.header("Access-Control-Allow-Origin", "*");
-        res.header("Access-Control-Allow-Headers", "Content-Type, Accept");
+        res.header("Access-Control-Allow-Headers", "Content-Type, Accept, Access-Control-Allow-Origin");
         res.status(200).send(postsCollection);
       } catch (error) {
         console.error(error);
@@ -208,6 +208,7 @@ router
 
       try {
         await post.save();
+        res.header("Access-Control-Allow-Origin", "*");
         res.status(201).send(post);
       } catch (err) {
         console.log(err);
@@ -225,7 +226,7 @@ router
     try {
       res.header("Access-Control-Allow-Methods", "HEAD, GET, PUT, DELETE, OPTIONS");
       res.header("Access-Control-Allow-Origin", "*");
-      res.header("Access-Control-Allow-Headers", "Content-Type, Accept");
+      res.header("Access-Control-Allow-Headers", "Content-Type, Accept, Access-Control-Allow-Origin");
       res.header("Allow", "HEAD, GET, PUT, DELETE, OPTIONS");
       res.status(200).send();
     } catch (error) {
@@ -239,7 +240,7 @@ router
         let post = await Post.findById(req.params.id);
         res.header("Access-Control-Allow-Methods", "HEAD, GET, PUT, DELETE, OPTIONS");
         res.header("Access-Control-Allow-Origin", "*");
-        res.header("Access-Control-Allow-Headers", "Content-Type, Accept");
+        res.header("Access-Control-Allow-Headers", "Content-Type, Accept, Access-Control-Allow-Origin");
         res.header("Allow", "HEAD, GET, PUT, DELETE, OPTIONS");
         res.status(200).send(post.toJSON());
       } catch (error) {
@@ -254,6 +255,7 @@ router
     if (contentIsNotEmpty(req) && contentIsJSon(req)) {
       try {
         let post = await Post.findByIdAndUpdate(req.params.id, { user: req.body.user, title: req.body.title, body: req.body.body, active: req.body.active });
+        res.header("Access-Control-Allow-Origin", "*");
         res.status(200).send(post);
       } catch (error) {
         console.error(error);
@@ -267,6 +269,7 @@ router
   .delete(async (req, res) => {
     try {
       await Post.findByIdAndDelete(req.params.id);
+      res.header("Access-Control-Allow-Origin", "*");
       res.status(204).send();
     } catch (err) {
       console.log(err);

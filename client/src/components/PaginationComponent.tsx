@@ -22,24 +22,26 @@ type TPaginationProps = {
 export default function PaginationComponent(props: TPaginationProps) {
   return (
     <div className="pagination">
-      <Link className="paginationLink" to={`/${props.first}`} onClick={() => props.loadPosts()}>
+      <Link className="btn first" to={`/${props.first}`} onClick={() => props.loadPosts()}>
         &lt;&lt;&lt;
       </Link>
-      <Link className="paginationLink" to={`/${props.previous}`} onClick={() => props.loadPosts()}>
+      <Link className="btn previous" to={`/${props.previous}`} onClick={() => props.loadPosts()}>
         &lt;
       </Link>
-      <Link className="paginationLink" to={`/${props.next}`} onClick={() => props.loadPosts()}>
+      <Link className="btn next" to={`/${props.next}`} onClick={() => props.loadPosts()}>
         &gt;
       </Link>
-      <Link className="paginationLink" to={`/${props.last}`} onClick={() => props.loadPosts()}>
+      <Link className="btn last" to={`/${props.last}`} onClick={() => props.loadPosts()}>
         &gt;&gt;&gt;
       </Link>
-      <p className="paginationLink">
-        page: {props.currentPage}/{props.totalPages}
-      </p>
-      <p className="paginationLink">
-        showing {props.currentItems}/{props.totalItems} posts
-      </p>
+      <div className="paginationInfoContainer">
+        <p className="paginationInfo">
+          Page: {props.currentPage}/{props.totalPages}
+        </p>
+        <p className="paginationInfo">
+          Showing {props.currentItems} out of {props.totalItems} posts
+        </p>
+      </div>
     </div>
   );
 }

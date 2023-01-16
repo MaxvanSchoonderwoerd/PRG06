@@ -1,33 +1,29 @@
-import { useState } from "react";
-import { createPost } from "../api/createPost";
+type TFormProps = {
+  handleForm: React.FormEventHandler<HTMLFormElement>;
+  user: string;
+  title: string;
+  body: string;
+  active: string;
 
-export default function FormComponent() {
-  const [user, setUser] = useState("");
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
-  const [active, setActive] = useState("true");
-  //Create posts
-  async function handleCreatePost(e: React.FormEvent) {
-    e.preventDefault();
-    await createPost(user, title, body, active);
-    setUser("");
-    setTitle("");
-    setBody("");
-    setActive("");
-  }
+  setUser: Function;
+  setTitle: Function;
+  setBody: Function;
+  setActive: Function;
+};
 
+export default function FormComponent(props: TFormProps) {
   return (
-    <form onSubmit={handleCreatePost}>
+    <form onSubmit={props.handleForm}>
       <h2>Create posts</h2>
       <label htmlFor="postUser">User</label>
       <input
         id="postUser"
         type="text"
         placeholder="Enter your username"
-        value={user}
+        value={props.user}
         required
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          setUser(e.target.value);
+          props.setUser(e.target.value);
         }}
       />
       <label htmlFor="postTitle">Title</label>
@@ -35,19 +31,19 @@ export default function FormComponent() {
         id="postTitle"
         type="text"
         placeholder="Enter the title of your post"
-        value={title}
+        value={props.title}
         required
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          setTitle(e.target.value);
+          props.setTitle(e.target.value);
         }}
       />
       <label htmlFor="postBody">Body</label>
       <textarea
         id="postBody"
         placeholder="Enter the body of your post"
-        value={body}
+        value={props.body}
         onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
-          setBody(e.target.value);
+          props.setBody(e.target.value);
         }}
       ></textarea>
       <label style={{ display: "none" }} htmlFor="postActive">
@@ -60,7 +56,7 @@ export default function FormComponent() {
         checked
         disabled
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          setActive("true");
+          props.setActive("true");
         }}
       />
       <button>Create post</button>

@@ -1,10 +1,14 @@
-html {
+/* html {
   margin-right: calc(-1 * (100vw - 100%));
+} */
+
+#root {
+  background: linear-gradient(30deg, hsl(205, 71%, 25%), hsl(294, 25%, 50%));
 }
 
 nav {
   width: 100vw;
-  background-color: #3b3b3b;
+  /* background-color: #3b3b3b; */
   box-shadow: 0 5px 1rem rgba(0, 0, 0, 0.306);
   margin-bottom: 3rem;
 }
@@ -31,7 +35,7 @@ h1 {
 }
 
 form {
-  margin-right: 2rem;
+  margin-left: 2rem;
   min-width: 20rem;
 }
 
@@ -42,8 +46,8 @@ form > label {
 
 form > input {
   width: 21rem;
-  background-color: #3b3b3b;
-  border: solid 1px #858585;
+  background: none;
+  border: solid 1px white;
   border-radius: 2px;
   color: white;
   height: 1.5rem;
@@ -56,28 +60,35 @@ form > textarea {
   margin-bottom: 3rem;
   padding: 0.5rem;
   font-family: inherit;
+  background: none;
 }
 
 input:hover,
 input:focus,
 textarea:hover,
 textarea:focus {
-  border-color: #646cff;
+  border-color: inherit;
 }
 
 textarea {
   max-width: 20rem;
   min-width: 20rem;
   min-height: 6.9rem;
-  max-height: 12rem;
+  max-height: 6.9rem;
+  border: solid 1px white;
 }
 
 form > button {
   height: 3rem;
   width: 21rem;
-  background-color: #3b3b3b;
-  border: solid 1px #858585;
+  background: none;
+  border: solid 1px white;
   border-radius: 2px;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .postsLists {
@@ -96,8 +107,20 @@ form > button {
   height: 8rem;
   list-style: none;
   border-radius: 5px;
+  z-index: 2;
 }
 
+/* .post::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  border-radius: inherit;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.07) 0%, rgba(0, 0, 0, 0.3) 25%, rgba(0, 0, 0, 0.9) 100%);
+} */
 .post::after {
   content: "";
   position: absolute;
@@ -105,9 +128,13 @@ form > button {
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: -1;
+  z-index: 1;
   border-radius: inherit;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.07) 0%, rgba(0, 0, 0, 0.3) 25%, rgba(0, 0, 0, 0.9) 100%);
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(8.9px);
+  -webkit-backdrop-filter: blur(8.9px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .backgroundImg {
@@ -117,7 +144,7 @@ form > button {
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: -1;
+  z-index: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -126,10 +153,17 @@ form > button {
 }
 
 .user {
-  font-size: 0.8rem;
+  display: inline-block;
+  width: inherit;
+  max-height: inherit;
   position: absolute;
+  font-size: 0.8rem;
   top: 0;
   left: 10px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  z-index: 2;
 }
 
 .post > a::first-letter {
@@ -137,6 +171,7 @@ form > button {
 }
 
 .post > a {
+  z-index: 2;
   display: inline-block;
   width: inherit;
   max-height: inherit;
@@ -149,38 +184,67 @@ form > button {
 }
 
 .deleteButton {
-  font-size: 0.8rem;
-  color: white;
-  background-color: #3b3b3b;
   position: absolute;
-  bottom: 10px;
-  left: 10px;
+  top: -10px;
+  right: -10px;
+  width: 2rem;
+  height: 2rem;
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: rgba(255, 0, 0, 0.737);
   padding: 5px;
-  border-radius: 5px;
-  outline: none;
+  border-radius: 50%;
   z-index: 2;
-  border: #858585 solid 3px;
+
+  background: rgba(255, 0, 0, 0.15);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 0, 0, 0.22);
 }
 
 .deleteButton:hover,
 .deleteButton:focus {
-  transition: none;
-  cursor: pointer;
-  border: red solid 3px;
+  opacity: inherit;
 }
 
 .pagination {
-  width: 40rem;
+  position: relative;
   display: flex;
   flex-direction: row;
   color: white;
-  justify-content: space-around;
   align-items: center;
+  justify-content: center;
 }
 
-.paginationLink {
-  font-size: 1.5rem;
+.paginationInfo {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.447);
+  margin: 0 1rem;
+}
+
+.paginationInfoContainer {
+  position: absolute;
+  bottom: -2rem;
+  display: flex;
+}
+
+.btn {
+  background: none;
+  padding: 0.5rem;
+  margin: 0 0.5rem;
+  font-size: 0.8rem;
   color: white;
+  font-weight: 900;
+  border-radius: 5px;
+  border: solid 1px white;
+  width: 2rem;
+  text-align: center;
+}
+
+.btn:hover {
+  color: inherit;
 }
 
 .postContainer {
@@ -194,7 +258,6 @@ form > button {
   padding: 2rem;
   flex-direction: column;
   width: 30rem;
-  background-color: #3b3b3b;
   border-radius: 1rem;
   /* box-shadow: 0 1rem 4rem rgba(12, 14, 28, 0.251); */
 }

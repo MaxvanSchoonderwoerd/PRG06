@@ -2,17 +2,17 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { getPost } from "./api/getPost";
 import { putPost } from "./api/putPost";
-
 import "./App.css";
 
+type TPost = {
+  _id: string;
+  user: string;
+  title: string;
+  body: string;
+  active: string;
+};
+
 function Post() {
-  type TPost = {
-    _id: string;
-    user: string;
-    title: string;
-    body: string;
-    active: string;
-  };
   const [post, setPost] = useState<TPost>();
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
@@ -29,19 +29,23 @@ function Post() {
     await putPost(post?.user, title, body, post?.active, postId);
     setTitle("");
     setBody("");
+    loadPost();
+  }
+
+  async function loadPost() {
+    if (!postId) return;
+    try {
+      const response = await getPost(postId);
+      setPost(response);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   useEffect(() => {
-    (async () => {
-      try {
-        if (!postId) return;
-        const response = await getPost(postId);
-        setPost(response);
-      } catch (error) {
-        console.error(error);
-      }
-    })();
+    loadPost();
   }, [postId]);
+
   return (
     <section className="App">
       <nav className="nav">

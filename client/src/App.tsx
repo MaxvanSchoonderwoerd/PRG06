@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { createPost } from "./api/createPost";
 import { deletePost } from "./api/deletePost";
 import { getPosts } from "./api/getPosts";
 import "./App.css";
@@ -28,6 +29,11 @@ function App() {
   const [currentItems, setCurrentItems] = useState("");
   const [totalItems, setTotalItems] = useState("");
 
+  const [user, setUser] = useState("");
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
+  const [active, setActive] = useState("true");
+
   const [next, setNext] = useState("");
   const [previous, setPrevious] = useState("");
   const [first, setFirst] = useState("");
@@ -43,36 +49,47 @@ function App() {
   }, []);
 
   async function loadPosts() {
-    (async () => {
-      try {
-        console.log(start, limit);
-
-        //if pagination is given load that specific page
-        if (start != undefined && limit != undefined) {
-          const response = await getPosts(start, limit);
-          setPosts(response.items);
-          handlePaginationLinks(response.pagination._links);
-          handlePaginationInfo(response.pagination);
-        } else {
-          //load page 1
-          const response = await getPosts("1", "10");
-          setPosts(response.items);
-          handlePaginationLinks(response.pagination._links);
-          handlePaginationInfo(response.pagination);
-        }
-      } catch (error) {
-        console.error(error);
-        setError(`Api error, check if server is turned on. Error: ${error}`);
+    try {
+      //if pagination is given load that specific page
+      if (start != undefined && limit != undefined) {
+        const response = await getPosts(start, limit);
+        setPosts(response.items);
+        handlePaginationLinks(response.pagination._links);
+        handlePaginationInfo(response.pagination);
+      } else {
+        //load page 1
+        const response = await getPosts("1", "12");
+        setPosts(response.items);
+        handlePaginationLinks(response.pagination._links);
+        handlePaginationInfo(response.pagination);
       }
-    })();
+    } catch (error) {
+      console.error(error);
+      setError(`Api error, check if server is turned on. Error: ${error}`);
+    }
+  }
+
+  const handleForm: React.FormEventHandler<HTMLFormElement> = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    handleCreatePost(e);
+  };
+
+  //Create posts
+  async function handleCreatePost(e: React.FormEvent) {
+    await createPost(user, title, body, active);
+    setUser("");
+    setTitle("");
+    setBody("");
+    setActive("");
+    loadPosts();
   }
 
   //Delete posts
   async function handleDeletePost(post: TPost) {
     await deletePost(post._id)
       .then(() => {
-        // After the delete action is completed, update the posts list by removing the deleted post from the list
-        // setPosts(posts.filter((p) => p._id !== post._id));
+        //After the delete action is completed, update the posts list by removing the deleted post from the list
+        setPosts(posts.filter((p) => p._id !== post._id));
       })
       .catch((error) => {
         console.error(error);
@@ -82,19 +99,19 @@ function App() {
   async function handlePaginationLinks(_links: any) {
     const _next = await _links.next.href.replace("http://145.24.222.95:8000/posts?", "");
     const nextStart = _next.match(/\d+/)[0];
-    setNext(`${nextStart}/10`);
+    setNext(`${nextStart}/12`);
 
     const _previous = await _links.previous.href.replace("http://145.24.222.95:8000/posts?", "");
     const previousStart = _previous.match(/\d+/)[0];
-    setPrevious(`${previousStart}/10`);
+    setPrevious(`${previousStart}/12`);
 
     const _first = await _links.first.href.replace("http://145.24.222.95:8000/posts?", "");
     const firstStart = _first.match(/\d+/)[0];
-    setFirst(`${firstStart}/10`);
+    setFirst(`${firstStart}/12`);
 
     const _last = await _links.last.href.replace("http://145.24.222.95:8000/posts?", "");
     const lastStart = _last.match(/\d+/)[0];
-    setLast(`${lastStart}/10`);
+    setLast(`${lastStart}/12`);
   }
 
   async function handlePaginationInfo(paginationInfo: any) {
@@ -114,7 +131,6 @@ function App() {
         </h1>
       </nav>
       <div className="container">
-        <FormComponent />
         <div className="posts">
           <h2>Recent posts</h2>
           {errorMsg}
@@ -125,6 +141,7 @@ function App() {
           </ul>
           <PaginationComponent first={first} previous={previous} next={next} last={last} currentPage={currentPage} totalPages={totalPages} currentItems={currentItems} totalItems={totalItems} loadPosts={loadPosts} />
         </div>
+        <FormComponent handleForm={handleForm} user={user} title={title} body={body} active={active} setUser={setUser} setTitle={setTitle} setBody={setBody} setActive={setActive} />
       </div>
     </div>
   );

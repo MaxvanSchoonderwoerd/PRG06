@@ -13,9 +13,9 @@ export default function PostComponent(props: TPostProp) {
       <p className="user">Posted by {props.post.user}</p>
       <Link to={`/posts/${props.post._id}`}>{props.post.title}</Link>
       <button className="deleteButton" onClick={() => props.handleDeletePost(props.post)}>
-        Delete
+        X
       </button>
-      <img className="backgroundImg" src={postBg} alt="post background img" />
+      {/* <img className="backgroundImg" src={postBg} alt="post background img" /> */}
     </li>
   );
 }
