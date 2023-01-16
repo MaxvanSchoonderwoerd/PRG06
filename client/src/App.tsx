@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { createPost } from "./api/createPost";
 import { deletePost } from "./api/deletePost";
 import { getPosts } from "./api/getPosts";
-import postBg from "./background2.png";
 import "./App.css";
+import FormComponent from "./components/FormComponent";
+import PaginationComponent from "./components/PaginationComponent";
+import PostComponent from "./components/PostComponent";
 
 export type TPost = {
   _id: string;
@@ -33,10 +34,6 @@ function App() {
   const [last, setLast] = useState("");
 
   const [posts, setPosts] = useState<TPost[]>([]);
-  const [user, setUser] = useState("");
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
-  const [active, setActive] = useState("true");
 
   const [errorMsg, setError] = useState("");
 
@@ -70,22 +67,12 @@ function App() {
     })();
   }
 
-  //Create posts
-  async function handleCreatePost(e: React.FormEvent) {
-    e.preventDefault();
-    await createPost(user, title, body, active);
-    setUser("");
-    setTitle("");
-    setBody("");
-    setActive("");
-  }
-
   //Delete posts
   async function handleDeletePost(post: TPost) {
     await deletePost(post._id)
       .then(() => {
         // After the delete action is completed, update the posts list by removing the deleted post from the list
-        setPosts(posts.filter((p) => p._id !== post._id));
+        // setPosts(posts.filter((p) => p._id !== post._id));
       })
       .catch((error) => {
         console.error(error);
@@ -127,90 +114,16 @@ function App() {
         </h1>
       </nav>
       <div className="container">
-        <form onSubmit={handleCreatePost}>
-          <h2>Create posts</h2>
-          <label htmlFor="postUser">User</label>
-          <input
-            id="postUser"
-            type="text"
-            placeholder="Enter your username"
-            value={user}
-            required
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              setUser(e.target.value);
-            }}
-          />
-          <label htmlFor="postTitle">Title</label>
-          <input
-            id="postTitle"
-            type="text"
-            placeholder="Enter the title of your post"
-            value={title}
-            required
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              setTitle(e.target.value);
-            }}
-          />
-          <label htmlFor="postBody">Body</label>
-          <textarea
-            id="postBody"
-            placeholder="Enter the body of your post"
-            value={body}
-            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
-              setBody(e.target.value);
-            }}
-          ></textarea>
-          <label style={{ display: "none" }} htmlFor="postActive">
-            Active
-          </label>
-          <input
-            style={{ display: "none" }}
-            type="checkbox"
-            value={"true"}
-            checked
-            disabled
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              setActive("true");
-            }}
-          />
-          <button>Create post</button>
-        </form>
+        <FormComponent />
         <div className="posts">
           <h2>Recent posts</h2>
           {errorMsg}
           <ul className="postsLists">
             {posts.map((post) => (
-              <li className="post" key={post._id}>
-                <p className="user">Posted by {post.user}</p>
-                <Link to={`/posts/${post._id}`}>{post.title}</Link>
-                <button className="deleteButton" onClick={() => handleDeletePost(post)}>
-                  Delete
-                </button>
-                <img className="backgroundImg" src={postBg} alt="post background img" />
-                <img src="" alt="" />
-              </li>
+              <PostComponent post={post} handleDeletePost={handleDeletePost} key={post._id} />
             ))}
           </ul>
-          <div className="pagination">
-            <Link className="paginationLink" to={`/${first}`} onClick={() => loadPosts()}>
-              &lt;&lt;&lt;
-            </Link>
-            <Link className="paginationLink" to={`/${previous}`} onClick={() => loadPosts()}>
-              &lt;
-            </Link>
-            <Link className="paginationLink" to={`/${next}`} onClick={() => loadPosts()}>
-              &gt;
-            </Link>
-            <Link className="paginationLink" to={`/${last}`} onClick={() => loadPosts()}>
-              &gt;&gt;&gt;
-            </Link>
-            <p className="paginationLink">
-              page: {currentPage}/{totalPages}
-            </p>
-            <p className="paginationLink">
-              showing {currentItems}/{totalItems} posts
-            </p>
-          </div>
+          <PaginationComponent first={first} previous={previous} next={next} last={last} currentPage={currentPage} totalPages={totalPages} currentItems={currentItems} totalItems={totalItems} loadPosts={loadPosts} />
         </div>
       </div>
     </div>

@@ -5,7 +5,6 @@ import { putPost } from "./api/putPost";
 
 import "./App.css";
 
-//TODO: edit post functionality
 function Post() {
   type TPost = {
     _id: string;
