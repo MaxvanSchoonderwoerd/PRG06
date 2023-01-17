@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { createPost } from "./api/createPost";
 import { deletePost } from "./api/deletePost";
@@ -46,7 +46,7 @@ function App() {
   //Getting all posts
   useEffect(() => {
     loadPosts();
-  }, []);
+  }, [posts]);
 
   async function loadPosts() {
     try {
@@ -81,7 +81,6 @@ function App() {
     setTitle("");
     setBody("");
     setActive("");
-    loadPosts();
   }
 
   //Delete posts
@@ -131,6 +130,9 @@ function App() {
         </h1>
       </nav>
       <div className="container">
+        <div className="decoBall decoBallFirst"></div>
+        <div className="decoBall decoBallSecond"></div>
+        <div className="decoBall decoBallThird"></div>
         <div className="posts">
           <h2>Recent posts</h2>
           {errorMsg}
@@ -142,6 +144,9 @@ function App() {
           <PaginationComponent first={first} previous={previous} next={next} last={last} currentPage={currentPage} totalPages={totalPages} currentItems={currentItems} totalItems={totalItems} loadPosts={loadPosts} />
         </div>
         <FormComponent handleForm={handleForm} user={user} title={title} body={body} active={active} setUser={setUser} setTitle={setTitle} setBody={setBody} setActive={setActive} />
+        <div className="decoBall decoBallFourth"></div>
+        <div className="decoBall decoBallFith"></div>
+        <div className="decoBall decoBallSixth"></div>
       </div>
     </div>
   );

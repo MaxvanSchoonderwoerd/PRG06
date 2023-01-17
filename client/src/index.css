@@ -4,7 +4,7 @@
   line-height: 24px;
   font-weight: 400;
 
-  color-scheme: dark;
+  color-scheme: light;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
 
@@ -14,7 +14,9 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 }
-
+html {
+  overflow: hidden;
+}
 html::-webkit-scrollbar-track {
   background-color: hsl(0, 0%, 0%);
 }

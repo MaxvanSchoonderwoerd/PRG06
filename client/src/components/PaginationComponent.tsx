@@ -22,16 +22,16 @@ type TPaginationProps = {
 export default function PaginationComponent(props: TPaginationProps) {
   return (
     <div className="pagination">
-      <Link className="btn first" to={`/${props.first}`} onClick={() => props.loadPosts()}>
+      <Link className="btn first" to={`/${props.first}`}>
         &lt;&lt;&lt;
       </Link>
-      <Link className="btn previous" to={`/${props.previous}`} onClick={() => props.loadPosts()}>
+      <Link className="btn previous" to={`/${props.previous}`}>
         &lt;
       </Link>
-      <Link className="btn next" to={`/${props.next}`} onClick={() => props.loadPosts()}>
+      <Link className="btn next" to={`/${props.next}`}>
         &gt;
       </Link>
-      <Link className="btn last" to={`/${props.last}`} onClick={() => props.loadPosts()}>
+      <Link className="btn last" to={`/${props.last}`}>
         &gt;&gt;&gt;
       </Link>
       <div className="paginationInfoContainer">

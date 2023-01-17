@@ -7,8 +7,10 @@
 }
 
 nav {
+  position: absolute;
+  top: 0;
+  z-index: 2;
   width: 100vw;
-  /* background-color: #3b3b3b; */
   box-shadow: 0 5px 1rem rgba(0, 0, 0, 0.306);
   margin-bottom: 3rem;
 }
@@ -18,6 +20,7 @@ nav > h1 {
   margin: 0;
   padding-top: 1rem;
   padding-bottom: 1rem;
+  border: none;
 }
 
 .navLink {
@@ -26,15 +29,104 @@ nav > h1 {
 
 h1 {
   padding-left: 4rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid white;
 }
 
 .container {
+  margin-top: 7rem;
+  position: relative;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   padding: 0 4rem;
 }
 
+.decoBall {
+  position: absolute;
+  bottom: 0;
+}
+
+.decoBall::after {
+  position: absolute;
+  border-radius: 50%;
+  box-shadow: 0 1rem 56px rgba(0, 0, 0, 0.103);
+}
+
+.decoBallFirst::after {
+  content: "";
+  position: absolute;
+  bottom: -10rem;
+  left: -10rem;
+  width: 30rem;
+  height: 30rem;
+  background: linear-gradient(30deg, hsl(205, 71%, 25%), hsl(294, 25%, 50%));
+}
+
+.decoBallSecond::after {
+  content: "";
+  position: absolute;
+  bottom: 1rem;
+  left: 10rem;
+  width: 15rem;
+  height: 15rem;
+  background: linear-gradient(30deg, hsl(205, 71%, 25%), hsl(294, 25%, 50%));
+}
+
+.decoBallThird::after {
+  content: "";
+  position: absolute;
+  top: -24rem;
+  left: 14rem;
+  width: 5rem;
+  height: 5rem;
+  background: linear-gradient(30deg, hsl(205, 71%, 25%), hsl(294, 25%, 50%));
+}
+
+.decoBallFourth {
+  content: "";
+  position: absolute;
+
+  top: -6rem;
+  right: -5rem;
+
+  width: 35rem;
+  height: 35rem;
+
+  border-radius: 50%;
+  background: linear-gradient(30deg, hsl(205, 71%, 25%), hsl(294, 25%, 50%));
+  box-shadow: 0 1rem 56px rgba(0, 0, 0, 0.103);
+}
+.decoBallFith {
+  content: "";
+  position: absolute;
+
+  top: 4rem;
+  right: 15rem;
+
+  width: 20rem;
+  height: 20rem;
+
+  border-radius: 50%;
+  background: linear-gradient(30deg, hsl(205, 71%, 25%), hsl(294, 25%, 50%));
+  box-shadow: 0 1rem 56px rgba(0, 0, 0, 0.103);
+}
+.decoBallSixth {
+  content: "";
+  position: absolute;
+
+  bottom: 7rem;
+  right: 10rem;
+
+  width: 12rem;
+  height: 12rem;
+
+  border-radius: 50%;
+  background: linear-gradient(30deg, hsl(205, 71%, 25%), hsl(294, 25%, 50%));
+  box-shadow: 0 1rem 56px rgba(0, 0, 0, 0.103);
+}
+
 form {
+  z-index: 2;
   margin-left: 2rem;
   min-width: 20rem;
 }
@@ -61,6 +153,7 @@ form > textarea {
   padding: 0.5rem;
   font-family: inherit;
   background: none;
+  color: white;
 }
 
 input:hover,
@@ -71,10 +164,9 @@ textarea:focus {
 }
 
 textarea {
-  max-width: 20rem;
-  min-width: 20rem;
-  min-height: 6.9rem;
-  max-height: 6.9rem;
+  width: 20rem;
+  height: 6.9rem;
+  resize: none;
   border: solid 1px white;
 }
 
@@ -84,6 +176,7 @@ form > button {
   background: none;
   border: solid 1px white;
   border-radius: 2px;
+  color: white;
 }
 
 input::placeholder,
@@ -92,8 +185,11 @@ textarea::placeholder {
 }
 
 .postsLists {
+  width: 1008px;
+  height: 416px;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
   grid-gap: 1rem;
   padding: 0;
 }
@@ -254,17 +350,34 @@ textarea::placeholder {
 
 .postDetails {
   display: flex;
-  margin-top: 2rem;
-  padding: 2rem;
   flex-direction: column;
-  width: 30rem;
-  border-radius: 1rem;
-  /* box-shadow: 0 1rem 4rem rgba(12, 14, 28, 0.251); */
+  margin-left: 0;
 }
 
-.postDetails > h1 {
-  margin: 0;
+.postDetailsTitle,
+.postDetailsBody {
+  all: unset;
   padding: 0;
+  width: 90vw;
+  min-height: 4rem;
+}
+
+.postDetailsTitle {
+  font-size: 3.2em;
+  line-height: 1.1;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid white;
+}
+
+.postDetailsBody {
+  display: inline;
+  padding: 1rem 0;
+  height: 20rem;
+  margin-bottom: 1rem;
+}
+
+.postDetailsBody:focus {
+  outline: none;
 }
 
 .postContent::first-letter {

@@ -37,6 +37,8 @@ function Post() {
     try {
       const response = await getPost(postId);
       setPost(response);
+      setTitle(response.title);
+      setBody(response.body);
     } catch (error) {
       console.error(error);
     }
@@ -56,44 +58,37 @@ function Post() {
         </h1>
       </nav>
       <div className="container">
-        <div className="postContainer">
+        {/* <div className="postContainer">
           <div className="postDetails">
             <h1 className="postContent">{post?.title}</h1>
             <p className="postContent">By: {post?.user}</p>
             <p className="postContent">{post?.body}</p>
           </div>
-        </div>
+        </div> */}
         <div className="postContainer">
-          <div className="postDetails">
-            <form onSubmit={handleUpdatePost}>
-              <h2>Update post</h2>
-              <label style={{ display: "none" }} htmlFor="postTitle">
-                Title
-              </label>
-              <input
-                id="postTitle"
-                type="text"
-                placeholder={post?.title}
-                value={title}
-                required
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  setTitle(e.target.value);
-                }}
-              />
-              <label style={{ display: "none" }} htmlFor="postBody">
-                Body
-              </label>
-              <textarea
-                id="postBody"
-                placeholder={post?.body}
-                value={body}
-                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
-                  setBody(e.target.value);
-                }}
-              ></textarea>
-              <button>Update post</button>
-            </form>
-          </div>
+          <form className="postDetails" onSubmit={handleUpdatePost}>
+            <input
+              className="postDetailsTitle"
+              id="postTitle"
+              type="text"
+              placeholder={post?.title}
+              value={title}
+              required
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                setTitle(e.target.value);
+              }}
+            />
+            <textarea
+              className="postDetailsBody"
+              id="postBody"
+              placeholder={post?.body}
+              value={body}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+                setBody(e.target.value);
+              }}
+            ></textarea>
+            <button>Update post</button>
+          </form>
         </div>
       </div>
     </section>
