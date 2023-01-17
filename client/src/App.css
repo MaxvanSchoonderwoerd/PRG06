@@ -13,6 +13,11 @@ nav {
   width: 100vw;
   box-shadow: 0 5px 1rem rgba(0, 0, 0, 0.306);
   margin-bottom: 3rem;
+  /* background: rgba(255, 255, 255, 0.2); */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(8.9px);
+  -webkit-backdrop-filter: blur(8.9px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 nav > h1 {
@@ -178,6 +183,11 @@ form > textarea {
   font-family: inherit;
   background: none;
   color: white;
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(8.9px);
+  -webkit-backdrop-filter: blur(8.9px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 input:hover,
@@ -201,6 +211,11 @@ form > button {
   border: solid 1px white;
   border-radius: 2px;
   color: white;
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(8.9px);
+  -webkit-backdrop-filter: blur(8.9px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 input::placeholder,

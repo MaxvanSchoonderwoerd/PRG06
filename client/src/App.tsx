@@ -15,6 +15,7 @@ export type TPost = {
   body: string;
   active: string;
 };
+
 export type TPaginationParams = {
   start: string | undefined;
   limit: string | undefined;
