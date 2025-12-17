@@ -5,7 +5,7 @@ import { putPost } from "./api/putPost";
 import "./App.css";
 
 type TPost = {
-  _id: string;
+  id: string;
   user: string;
   title: string;
   body: string;

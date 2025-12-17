@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { TPost } from "../App";
-import postBg from "../assets/background2.png";
 
 type TPostProp = {
   post: TPost;
@@ -14,7 +13,7 @@ export default function PostComponent(props: TPostProp) {
   return (
     <li
       className="post"
-      key={props.post._id}
+      key={props.post.id}
       onMouseEnter={(e) => {
         setStyle({ display: "block" });
       }}
@@ -23,7 +22,7 @@ export default function PostComponent(props: TPostProp) {
       }}
     >
       <p className="user">Posted by {props.post.user}</p>
-      <Link to={`/posts/${props.post._id}`}>{props.post.title}</Link>
+      <Link to={`/posts/${props.post.id}`}>{props.post.title}</Link>
       <button className="deleteButton" style={style} onClick={() => props.handleDeletePost(props.post)}>
         X
       </button>

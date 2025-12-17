@@ -9,7 +9,7 @@ import PaginationComponent from "./components/PaginationComponent";
 import PostComponent from "./components/PostComponent";
 
 export type TPost = {
-  _id: string;
+  id: string;
   user: string;
   title: string;
   body: string;
@@ -54,15 +54,15 @@ function App() {
       //if pagination is given load that specific page
       if (start != undefined && limit != undefined) {
         const response = await getPosts(start, limit);
-        setPosts(response.items);
-        handlePaginationLinks(response.pagination._links);
-        handlePaginationInfo(response.pagination);
+        setPosts(response);
+        // handlePaginationLinks(response.pagination._links);
+        // handlePaginationInfo(response.pagination);
       } else {
         //load page 1
         const response = await getPosts("1", "12");
-        setPosts(response.items);
-        handlePaginationLinks(response.pagination._links);
-        handlePaginationInfo(response.pagination);
+        setPosts(response);
+        // handlePaginationLinks(response.pagination._links);
+        // handlePaginationInfo(response.pagination);
       }
     } catch (error) {
       console.error(error);
@@ -86,10 +86,10 @@ function App() {
 
   //Delete posts
   async function handleDeletePost(post: TPost) {
-    await deletePost(post._id)
+    await deletePost(post.id)
       .then(() => {
         //After the delete action is completed, update the posts list by removing the deleted post from the list
-        setPosts(posts.filter((p) => p._id !== post._id));
+        setPosts(posts.filter((p) => p.id !== post.id));
       })
       .catch((error) => {
         console.error(error);
@@ -139,7 +139,7 @@ function App() {
           {errorMsg}
           <ul className="postsLists">
             {posts.map((post) => (
-              <PostComponent post={post} handleDeletePost={handleDeletePost} key={post._id} />
+              <PostComponent post={post} handleDeletePost={handleDeletePost} key={post.id} />
             ))}
           </ul>
           <PaginationComponent first={first} previous={previous} next={next} last={last} currentPage={currentPage} totalPages={totalPages} currentItems={currentItems} totalItems={totalItems} loadPosts={loadPosts} />
