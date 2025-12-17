@@ -157,7 +157,7 @@ h1 {
 form {
   z-index: 2;
   margin-left: 2rem;
-  min-width: 20rem;
+  width: 20rem;
 }
 
 form > label {
