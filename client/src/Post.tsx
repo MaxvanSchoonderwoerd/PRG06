@@ -64,7 +64,7 @@ function Post() {
       <nav className="nav">
         <h1>
           <Link className="navLink" to={"/"}>
-            PRG6 project - MERN stack posts app
+            Posts app met spring-boot backend
           </Link>
         </h1>
       </nav>
@@ -83,7 +83,7 @@ function Post() {
               }}
             />
             <p>
-              Created {timeAgo.format(createdAt)}, edited
+              Created {timeAgo.format(createdAt)}, edited{" "}
               {timeAgo.format(editedAt)}
             </p>
             <textarea
