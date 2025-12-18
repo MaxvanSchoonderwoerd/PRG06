@@ -4,6 +4,7 @@
 
 #root {
   background: linear-gradient(30deg, hsl(205, 71%, 25%), hsl(294, 25%, 50%));
+  width: 100vw;
 }
 
 nav {
@@ -382,9 +383,10 @@ textarea::placeholder {
   color: inherit;
 }
 
-.postContainer {
+.flex {
   display: flex;
-  justify-content: center;
+  gap: 1rem;
+  align-items: center;
 }
 
 .postDetails {
