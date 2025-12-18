@@ -10,7 +10,7 @@ import PostComponent from "./components/PostComponent";
 
 export type TPost = {
   id: string;
-  user: string;
+  username: string;
   title: string;
   body: string;
   active: string;
@@ -44,31 +44,25 @@ function App() {
 
   const [errorMsg, setError] = useState("");
 
-  //Getting all posts
+  // Getting all posts
   useEffect(() => {
     loadPosts();
-  }, [posts]);
+  }, []);
 
-  async function loadPosts() {
-    try {
-      //if pagination is given load that specific page
-      if (start != undefined && limit != undefined) {
-        const response = await getPosts(start, limit);
-        setPosts(response);
-        // handlePaginationLinks(response.pagination._links);
-        // handlePaginationInfo(response.pagination);
-      } else {
-        //load page 1
-        const response = await getPosts("1", "12");
-        setPosts(response);
-        // handlePaginationLinks(response.pagination._links);
-        // handlePaginationInfo(response.pagination);
-      }
-    } catch (error) {
-      console.error(error);
-      setError(`Api error, check if server is turned on. Error: ${error}`);
-    }
+const loadPosts = async () => {
+  try {
+    const response =
+      start && limit
+        ? await getPosts(start, limit)
+        : await getPosts("1", "12");
+
+    setPosts(response);
+  } catch (error) {
+    console.error(error);
+    setError(`Api error, check if server is turned on. Error: ${error}`);
   }
+};
+
 
   const handleForm: React.FormEventHandler<HTMLFormElement> = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -82,6 +76,7 @@ function App() {
     setTitle("");
     setBody("");
     setActive("");
+    await loadPosts(); // explicit refetch
   }
 
   //Delete posts
@@ -126,7 +121,7 @@ function App() {
       <nav className="nav">
         <h1>
           <Link className="navLink" to={"/"}>
-            PRG6 project - MERN stack posts app
+            Posts app met spring-boot backend
           </Link>
         </h1>
       </nav>
