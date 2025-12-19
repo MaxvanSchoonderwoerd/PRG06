@@ -1,45 +1,60 @@
-import { Link, useParams } from "react-router-dom";
+import { Page } from "../App";
 
-export type TPaginationParams = {
-  start: string | undefined;
-  limit: string | undefined;
+type PaginationProps = {
+  page: Page<any> | null;
+  onPageChange: (page: number) => void;
 };
 
-type TPaginationProps = {
-  first: string;
-  previous: string;
-  next: string;
-  last: string;
+export default function PaginationComponent({
+  page,
+  onPageChange,
+}: PaginationProps) {
+  if (!page) return null;
 
-  currentPage: string;
-  totalPages: string;
-  currentItems: string;
-  totalItems: string;
-
-  loadPosts: Function;
-};
-
-export default function PaginationComponent(props: TPaginationProps) {
   return (
     <div className="pagination">
-      <Link className="btn first" to={`/${props.first}`}>
+      {/* First page */}
+      <button
+        className="btn first"
+        disabled={page.first}
+        onClick={() => onPageChange(0)}
+      >
         &lt;&lt;&lt;
-      </Link>
-      <Link className="btn previous" to={`/${props.previous}`}>
+      </button>
+
+      {/* Previous page */}
+      <button
+        className="btn previous"
+        disabled={page.first}
+        onClick={() => onPageChange(page.number - 1)}
+      >
         &lt;
-      </Link>
-      <Link className="btn next" to={`/${props.next}`}>
+      </button>
+
+      {/* Next page */}
+      <button
+        className="btn next"
+        disabled={page.last}
+        onClick={() => onPageChange(page.number + 1)}
+      >
         &gt;
-      </Link>
-      <Link className="btn last" to={`/${props.last}`}>
+      </button>
+
+      {/* Last page */}
+      <button
+        className="btn last"
+        disabled={page.last}
+        onClick={() => onPageChange(page.totalPages - 1)}
+      >
         &gt;&gt;&gt;
-      </Link>
+      </button>
+
       <div className="paginationInfoContainer">
         <p className="paginationInfo">
-          Page: {props.currentPage}/{props.totalPages}
+          Page {page.number + 1} of {page.totalPages}
         </p>
         <p className="paginationInfo">
-          Showing {props.currentItems} out of {props.totalItems} posts
+          Showing {page.content.length} of {page.totalElements} posts
         </p>
       </div>
     </div>
