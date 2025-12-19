@@ -1,5 +1,5 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { createPost } from "./api/createPost";
 import { deletePost } from "./api/deletePost";
 import { getPosts } from "./api/getPosts";
@@ -18,53 +18,66 @@ export type TPost = {
 
 export type TPaginationParams = {
   start: string | undefined;
-  limit: string | undefined;
+};
+
+export type Page<T> = {
+  content: T[];
+  number: number; // current page (0-based)
+  size: number;
+  totalPages: number;
+  totalElements: number;
+  first: boolean;
+  last: boolean;
 };
 
 function App() {
-  let { start } = useParams<TPaginationParams>();
-  let { limit } = useParams<TPaginationParams>();
-
-  const [currentPage, setCurrentPage] = useState("");
-  const [totalPages, setTotalPages] = useState("");
-  const [currentItems, setCurrentItems] = useState("");
-  const [totalItems, setTotalItems] = useState("");
-
   const [user, setUser] = useState("");
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [active, setActive] = useState("true");
 
-  const [next, setNext] = useState("");
-  const [previous, setPrevious] = useState("");
-  const [first, setFirst] = useState("");
-  const [last, setLast] = useState("");
+  const [page, setPage] = useState<Page<TPost> | null>(null);
 
-  const [posts, setPosts] = useState<TPost[]>([]);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const pageFromUrl = Number(searchParams.get("page") ?? "1") - 1;
+
+  const [pageNumber, setPageNumber] = useState<number>(
+    isNaN(pageFromUrl) ? 0 : pageFromUrl
+  );
 
   const [errorMsg, setError] = useState("");
 
   // Getting all posts
   useEffect(() => {
-    loadPosts();
-  }, []);
+    loadPosts(pageNumber);
+  }, [pageNumber]);
 
-const loadPosts = async () => {
-  try {
-    const response =
-      start && limit
-        ? await getPosts(start, limit)
-        : await getPosts("1", "12");
+  useEffect(() => {
+    setSearchParams({ page: String(pageNumber + 1) });
+  }, [pageNumber, setSearchParams]);
 
-    setPosts(response);
-  } catch (error) {
-    console.error(error);
-    setError(`Api error, check if server is turned on. Error: ${error}`);
-  }
-};
+  useEffect(() => {
+    const raw = Number(searchParams.get("page") ?? "1") - 1;
+    const safePage = Math.max(0, raw);
 
+    if (!isNaN(safePage) && safePage !== pageNumber) {
+      setPageNumber(safePage);
+    }
+  }, [searchParams]);
 
-  const handleForm: React.FormEventHandler<HTMLFormElement> = (e: React.FormEvent<HTMLFormElement>) => {
+  const loadPosts = async (page: number) => {
+    try {
+      const response = await getPosts(page);
+      setPage(response);
+    } catch (err) {
+      setError("Failed to load posts");
+    }
+  };
+
+  const handleForm: React.FormEventHandler<HTMLFormElement> = (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
     e.preventDefault();
     handleCreatePost(e);
   };
@@ -76,44 +89,13 @@ const loadPosts = async () => {
     setTitle("");
     setBody("");
     setActive("");
-    await loadPosts(); // explicit refetch
+    await loadPosts(pageNumber);
   }
 
   //Delete posts
   async function handleDeletePost(post: TPost) {
-    await deletePost(post.id)
-      .then(() => {
-        //After the delete action is completed, update the posts list by removing the deleted post from the list
-        setPosts(posts.filter((p) => p.id !== post.id));
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }
-
-  async function handlePaginationLinks(_links: any) {
-    const _next = await _links.next.href.replace("http://145.24.222.95:8000/posts?", "");
-    const nextStart = _next.match(/\d+/)[0];
-    setNext(`${nextStart}/12`);
-
-    const _previous = await _links.previous.href.replace("http://145.24.222.95:8000/posts?", "");
-    const previousStart = _previous.match(/\d+/)[0];
-    setPrevious(`${previousStart}/12`);
-
-    const _first = await _links.first.href.replace("http://145.24.222.95:8000/posts?", "");
-    const firstStart = _first.match(/\d+/)[0];
-    setFirst(`${firstStart}/12`);
-
-    const _last = await _links.last.href.replace("http://145.24.222.95:8000/posts?", "");
-    const lastStart = _last.match(/\d+/)[0];
-    setLast(`${lastStart}/12`);
-  }
-
-  async function handlePaginationInfo(paginationInfo: any) {
-    setCurrentPage(paginationInfo.currentPage);
-    setTotalPages(paginationInfo.totalPages);
-    setCurrentItems(paginationInfo.currentItems);
-    setTotalItems(paginationInfo.totalItems);
+    await deletePost(post.id);
+    await loadPosts(pageNumber);
   }
 
   return (
@@ -133,13 +115,27 @@ const loadPosts = async () => {
           <h2>Recent posts</h2>
           {errorMsg}
           <ul className="postsLists">
-            {posts.map((post) => (
-              <PostComponent post={post} handleDeletePost={handleDeletePost} key={post.id} />
+            {page?.content.map((post) => (
+              <PostComponent
+                key={post.id}
+                post={post}
+                handleDeletePost={handleDeletePost}
+              />
             ))}
           </ul>
-          <PaginationComponent first={first} previous={previous} next={next} last={last} currentPage={currentPage} totalPages={totalPages} currentItems={currentItems} totalItems={totalItems} loadPosts={loadPosts} />
+          <PaginationComponent page={page} onPageChange={setPageNumber} />
         </div>
-        <FormComponent handleForm={handleForm} user={user} title={title} body={body} active={active} setUser={setUser} setTitle={setTitle} setBody={setBody} setActive={setActive} />
+        <FormComponent
+          handleForm={handleForm}
+          user={user}
+          title={title}
+          body={body}
+          active={active}
+          setUser={setUser}
+          setTitle={setTitle}
+          setBody={setBody}
+          setActive={setActive}
+        />
         <div className="decoBall decoBallFourth"></div>
         <div className="decoBall decoBallFith"></div>
         <div className="decoBall decoBallSixth"></div>
