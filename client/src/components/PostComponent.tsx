@@ -21,9 +21,13 @@ export default function PostComponent(props: TPostProp) {
         setStyle({ display: "none" });
       }}
     >
-      <p className="user">Posted by {props.post.user}</p>
+      <p className="user">Posted by {props.post.username}</p>
       <Link to={`/posts/${props.post.id}`}>{props.post.title}</Link>
-      <button className="deleteButton" style={style} onClick={() => props.handleDeletePost(props.post)}>
+      <button
+        className="deleteButton"
+        style={style}
+        onClick={() => props.handleDeletePost(props.post)}
+      >
         X
       </button>
     </li>
